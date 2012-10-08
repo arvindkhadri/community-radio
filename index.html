@@ -1,74 +1,126 @@
 <!DOCTYPE html>
 <html>
-
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Community-radio : " />
+		<meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'></meta>
+    <script type="text/javascript" src="d3.v2.min.js"></script>
+    <script type="text/javascript" src="http://polymaps.org/polymaps.min.js?2.5.0"></script>
+		<script type="text/javascript" src="underscore-min.js"></script>
+    <style type="text/css">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+			@import url("http://polymaps.org/style.css");
 
-    <title>Community-radio</title>
+			html, body {
+			height: 100%;
+			background: #E6E6E6;
+			margin: 0;
+			font: 10px sans-serif;
+			}
+
+			svg {
+			width: 900px;
+			height: 500px;
+			display: block;
+			}
+
+			circle {
+			stroke: black;
+			fill: brown;
+			fill-opacity: .5;
+			}
+
+			#map {
+			width: 1000px;
+			height: 500px;
+			}
+		</style>
   </head>
-
   <body>
+    <div id="map"></div>
+    <script type="text/javascript">
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/arvindkhadri/community-radio">View on GitHub</a>
+			var po = org.polymaps;
+			var M = {};
+			// Create the map object, add it to
+			var map = po.map()
+			.container(d3.select("#map").append("svg:svg").node())
+			.zoom(4)
+			.add(po.interact());
+			 map.center({lat:12.9725, lon:77.58443});
+			// Add the CloudMade image tiles as a base layer
+			map.add(po.image()
+			.url(po.url("http://{S}tile.cloudmade.com"
+			+ "/157f9082094e402f89d242e9b9144483" // http://cloudmade.com/register
+			+ "/997/256/{Z}/{X}/{Y}.png")
+			.hosts(["a.", "b.", "c.", ""])));
 
-          <h1 id="project_title">Community-radio</h1>
-          <h2 id="project_tagline"></h2>
+			// Add the compass control on top.
+			map.add(po.compass()
+			.pan("none"));
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/arvindkhadri/community-radio/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/arvindkhadri/community-radio/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+			d3.csv('gka.csv',function(d){
+			M.data = d;
+			var x = _.countBy(d, 'Age');
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>Welcome to GitHub Pages.</h3>
+			<!-- // Insert our layer beneath the compass. -->
+			var layer = d3.select("#map svg").insert("svg:g", ".compass");
+			// Add an svg:g for each station.
+			var marker = layer.selectAll("g")
+      .data(d3.entries(d))
+			.enter().append("svg:g")
+      .attr("transform", transform);
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+			<!-- console.log(marker); -->
+			// Add a circle.
+			marker.append("svg:circle")
+      .attr("r", 4.5);
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+			// Add a label.
+			marker.append("svg:text")
+      .attr("x", 7)
+      .attr("dy", ".31em")
+      .text(function(d) {  return x['Less than 25']; });
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+			// Whenever the map moves, update the marker positions.
+			map.on("move", function() {
+			layer.selectAll("g").attr("transform", transform);
+			});
 
-<h3>Designer Templates</h3>
+			function transform(d) {
+			d = map.locationPoint({lon: 76.983, lat: 28.099});
+			return "translate(" + d.x + "," + d.y + ")";
+			}});
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+			xy = d3.geo.mercator().translate([-413,395]).scale(4000);//d3.geo.albersUsa().translate([-900,950]).scale(28000)
+			path = d3.geo.path().projection(xy);
 
-<h3>Rather Drive Stick?</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+			vis = d3.select("#map svg").insert("svg:g", "#vis") //d3.select("#vis")
+			//.append("svg:g")
+			.attr("width", 900)
+			.attr("height", 900);
 
-<h3>Authors and Contributors</h3>
+			d3.json("india_geojson.json", function(d){
+			vis.append("svg:g")
+			.attr("class", "tracts")
+			.selectAll("path")
+			.data(d.features)
+			.enter().append("svg:path")
+			.attr("d", path)
+			.attr("fill-opacity", 0.5)
+			.attr("fill", function(d){if(d.properties["STATEFP10"] == "20") {return "#B5D9B9";} else {return"#85C3C0";}})
+			.attr("stroke", "#222");
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+			<!-- map.on("move", function() { -->
+			<!-- layer.selectAll("g").attr("transform", transform1); -->
+			<!-- }); -->
 
-<h3>Support or Contact</h3>
+			function transform1(d) {
+			//d = map.locationPoint({lon: 76.983, lat: 28.099});
+			//return "translate(" + -413 + "," + 395 + ")";
+			}
+			});
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Community-radio maintained by <a href="https://github.com/arvindkhadri">arvindkhadri</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
+    </script>
   </body>
 </html>
