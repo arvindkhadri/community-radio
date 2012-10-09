@@ -45,7 +45,7 @@
 			.container(d3.select("#map").append("svg:svg").node())
 			.zoom(4)
 			.add(po.interact());
-			 map.center({lat:12.9725, lon:77.58443});
+			map.center({lat:12.9725, lon:77.58443});
 			// Add the CloudMade image tiles as a base layer
 			map.add(po.image()
 			.url(po.url("http://{S}tile.cloudmade.com"
@@ -98,6 +98,7 @@
 			//.append("svg:g")
 			.attr("width", 900)
 			.attr("height", 900);
+			.call(d3.behavior.zoom().on("zoom", redraw));
 
 			d3.json("india_geojson.json", function(d){
 			vis.append("svg:g")
@@ -109,19 +110,20 @@
 			.attr("fill-opacity", 0.5)
 			.attr("fill", function(d){if(d.properties["STATEFP10"] == "20") {return "#B5D9B9";} else {return"#85C3C0";}})
 			.attr("stroke", "#222");
+			}});
 
-			<!-- map.on("move", function() { -->
-			<!-- layer.selectAll("g").attr("transform", transform1); -->
-			<!-- }); -->
+			function redraw()
+			{
+			var t = d3.geo.mercator().translate();
+			var s = d3.geo.mercator().scale();
+			var tx = t[0] * d3.event.scale + d3.event.translate[0];
+      var ty = t[1] * d3.event.scale + d3.event.translate[1];
+      proj.translate([tx, ty]);
 
-			function transform1(d) {
-			//d = map.locationPoint({lon: 76.983, lat: 28.099});
-			//return "translate(" + -413 + "," + 395 + ")";
+			proj.scale(s * d3.event.scale);
+
 			}
-			});
-
-
     </script>
-<p>Check out the code <a href="https://github.com/arvindkhadri/community-radio"> at github</a></p>.
+		<p>Check out the code <a href="https://github.com/arvindkhadri/community-radio"> at github</a></p>.
   </body>
 </html>
