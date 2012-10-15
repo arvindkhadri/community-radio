@@ -2,128 +2,15 @@
 <html>
   <head>
 		<meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'></meta>
-    <script type="text/javascript" src="d3.v2.min.js"></script>
-    <script type="text/javascript" src="http://polymaps.org/polymaps.min.js?2.5.0"></script>
 		<script type="text/javascript" src="underscore-min.js"></script>
-    <style type="text/css">
-
-			@import url("http://polymaps.org/style.css");
-
-			html, body {
-			height: 100%;
-			background: #E6E6E6;
-			margin: 0;
-			font: 10px sans-serif;
-			}
-
-			svg {
-			width: 900px;
-			height: 500px;
-			display: block;
-			}
-
-			circle {
-			stroke: black;
-			fill: brown;
-			fill-opacity: .5;
-			}
-
-			#map {
-			width: 1000px;
-			height: 500px;
-			}
-		</style>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.css" />
+		<script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.js"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css"/>
   </head>
-  <body>
-    <div id="map"></div>
-    <script type="text/javascript">
-
-			var po = org.polymaps;
-			var M = {};
-			// Create the map object, add it to
-			var map = po.map()
-			.container(d3.select("#map").append("svg:svg").node())
-			.zoom(4)
-			.add(po.interact());
-			map.center({lat:12.9725, lon:77.58443});
-			// Add the CloudMade image tiles as a base layer
-			map.add(po.image()
-			.url(po.url("http://{S}tile.cloudmade.com"
-			+ "/157f9082094e402f89d242e9b9144483" // http://cloudmade.com/register
-			+ "/997/256/{Z}/{X}/{Y}.png")
-			.hosts(["a.", "b.", "c.", ""])));
-
-			// Add the compass control on top.
-			map.add(po.compass()
-			.pan("none"));
-
-			d3.csv('gka.csv',function(d){
-			M.data = d;
-			var x = _.countBy(d, 'Age');
-
-			<!-- // Insert our layer beneath the compass. -->
-			var layer = d3.select("#map svg").insert("svg:g", ".compass");
-			// Add an svg:g for each station.
-			var marker = layer.selectAll("g")
-      .data(d3.entries(d))
-			.enter().append("svg:g")
-      .attr("transform", transform);
-
-			<!-- console.log(marker); -->
-			// Add a circle.
-			marker.append("svg:circle")
-      .attr("r", 4.5);
-
-			// Add a label.
-			marker.append("svg:text")
-      .attr("x", 7)
-      .attr("dy", ".31em")
-      .text(function(d) {  return x['Less than 25']; });
-
-			// Whenever the map moves, update the marker positions.
-			map.on("move", function() {
-			layer.selectAll("g").attr("transform", transform);
-			});
-
-			function transform(d) {
-			d = map.locationPoint({lon: 76.983, lat: 28.099});
-			return "translate(" + d.x + "," + d.y + ")";
-			}});
-
-			xy = d3.geo.mercator().translate([-413,395]).scale(4000);//d3.geo.albersUsa().translate([-900,950]).scale(28000)
-			path = d3.geo.path().projection(xy);
-
-
-			vis = d3.select("#map svg").insert("svg:g", "#vis") //d3.select("#vis")
-			//.append("svg:g")
-			.attr("width", 900)
-			.attr("height", 900);
-			.call(d3.behavior.zoom().on("zoom", redraw));
-
-			d3.json("india_geojson.json", function(d){
-			vis.append("svg:g")
-			.attr("class", "tracts")
-			.selectAll("path")
-			.data(d.features)
-			.enter().append("svg:path")
-			.attr("d", path)
-			.attr("fill-opacity", 0.5)
-			.attr("fill", function(d){if(d.properties["STATEFP10"] == "20") {return "#B5D9B9";} else {return"#85C3C0";}})
-			.attr("stroke", "#222");
-			}});
-
-			function redraw()
-			{
-			var t = d3.geo.mercator().translate();
-			var s = d3.geo.mercator().scale();
-			var tx = t[0] * d3.event.scale + d3.event.translate[0];
-      var ty = t[1] * d3.event.scale + d3.event.translate[1];
-      proj.translate([tx, ty]);
-
-			proj.scale(s * d3.event.scale);
-
-			}
-    </script>
+  <body class="container">
+    <div id="map" style="width: 1000px; height: 500px; margin-top:30px;"></div>
+    <script type="text/javascript" src="leaflet.js"></script>
 		<p>Check out the code <a href="https://github.com/arvindkhadri/community-radio"> at github</a></p>.
   </body>
 </html>
