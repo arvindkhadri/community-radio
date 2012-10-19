@@ -1,5 +1,7 @@
-* README
-** The data used for drawing of map is
+README
+The data used for drawing of map is
+
+
 	 latlng = {
 		0:{'lat':28.099, 'lng':76.983,  //GKA
 			 'stnName': 'Gurgaon ki Awaz (CR)',
