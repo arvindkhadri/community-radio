@@ -6,7 +6,7 @@ L.tileLayer('http://{s}.tile.cloudmade.com/157f9082094e402f89d242e9b9144483/997/
 
 latlng = {
 		0:{'lat':28.099, 'lng':76.983,  //GKA
-			 'stnName': 'Gurgaon ki Awaz',
+			 'stnName': 'Gurgaon ki Awaz (CR)',
 			 'freq': '107.8 MHz',
 			 'power': '10KW',
 			 'distName': 'Gurgaon',
@@ -17,7 +17,7 @@ latlng = {
 			 'licenseRange': '100 KM',
 			 'effectiveRange': '15 KM'},
 		1:{'lat':12.972, 'lng':77.584, //Bangalore
-			'stnName': 'Radio Active',
+			'stnName': 'Radio Active (CR)',
 			 'freq': '90.4 MHz',
 			 'power': '10KW',
 			 'distName': 'Bangalore Urban',
@@ -28,7 +28,7 @@ latlng = {
 			 'licenseRange': '100 KM',
 			 'effectiveRange': '2 KM'},
 		2:{'lat':24.691, 'lng':78.413,  //Lalitpur
-			'stnName': 'Lalit lokavani',
+			'stnName': 'Lalit lokavani (CR)',
 			 'freq': '91.1 MHz',
 			 'power': '10KW',
 			 'distName': 'Lalitpur',
@@ -39,7 +39,7 @@ latlng = {
 			 'licenseRange': '100 KM',
 			 'effectiveRange': '15 KM'},
 		3:{'lat':24.999, 'lng':79.499, //Bundelkhand
-			'stnName': 'Radio Bundelkhand',
+			'stnName': 'Radio Bundelkhand (CR)',
 			 'freq': '91.1 MHz',
 			 'power': '10KW',
 			 'distName': 'Bundelkhand',
@@ -49,9 +49,6 @@ latlng = {
 			 'licenseCost': '120000000 INR',
 			 'licenseRange': '100 KM',
 			 'effectiveRange': '35 KM'}
-};
-M = {
-		data:[]
 };
 for(var i in latlng)
 {
@@ -64,8 +61,47 @@ for(var i in latlng)
 				'fillColor':'black',
 				'fillOpacity':0.7});
 		c.addTo(map);
-		c.bindPopup(latlng[i]['stnName']+' '+latlng[i]['freq']);
+		// c.bindPopup(latlng[i]['stnName']+' '+latlng[i]['freq']);
+		c.bindPopup(JSON.stringify(latlng[i],null," "));
 		c.addEventListener('mousemove',function(e){
 				e.target.openPopup();
 		});
+		// c.addEventListener('click',function(e){
+		// 		console.log(e.target._latlng.lat);
+		// 		for(var x in latlng)
+		// 		{
+		// 				if(latlng[x]['lat'] == e.target._latlng.lat && latlng[x]['lng'] == e.target._latlng.lng)
+		// 						e.target.bindPopup(JSON.stringify(latlng[x])).openPopup();
+		// 		}
+
+		// });
 }
+$("#legend1").css("border-style",'solid');
+$("#legend1").css("width",'150px');
+$("#legend1").css("height",'200px');
+$("#legend1").css("position",'absolute');
+$("#legend1").html("<center><b>Legend</b></center>" + $("#legend1").html())
+
+$("#bluelegend").css("background-color",'blue');
+$("#bluelegend").css("width",'25px');
+$("#bluelegend").css("height",'15px');
+$("#bluelegend").css("position",'relative');
+$("#bluelegend").css("margin-left",'10px');
+$("#bluelegend").css("margin-top",'20px');
+
+$("#t1").css("position",'relative');
+$("#t1").css("margin-top",'20px');
+$("#t1").css("margin-left",'30px');
+$("#t1").html("<b>License range</b>");
+
+$("#blacklegend").css("background-color",'black');
+$("#blacklegend").css("width",'25px');
+$("#blacklegend").css("height",'15px');
+$("#blacklegend").css("position",'relative');
+$("#blacklegend").css("margin-left",'10px');
+$("#blacklegend").css("margin-top",'40px');
+
+$("#t2").css("position",'relative');
+$("#t2").css("margin-top",'40px');
+$("#t2").css("margin-left",'30px');
+$("#t2").html("<b>Effective range</b>");
