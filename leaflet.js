@@ -48,10 +48,27 @@ latlng = {
 			 'licenseType': 'CR',
 			 'licenseCost': '120000000 INR',
 			 'licenseRange': '100 KM',
-			 'effectiveRange': '35 KM'}
+			 'effectiveRange': '35 KM'},
+		4:{'lat':12.935, 'lng':77.573, //Bangalore
+			'stnName': 'Radio City ',
+			 'freq': '91.1 MHz',
+			 'power': '10KW',
+			 'distName': 'Bangalore Urban',
+			 'owner':'Private',
+			 'content':'Bollywod movie songs',
+			 'licenseType': 'Commercial',
+			 'licenseCost': '1 Crore',
+			 'licenseRange': '100 KM',
+			 'effectiveRange': '100 KM'}
+
 };
 for(var i in latlng)
 {
+		if(i == 4)
+		{
+				new L.marker([latlng[i]['lat'], latlng[i]['lng']],{'title':'2 Stations in Bangalore' }).addTo(map);
+
+		}
 		new L.circle([latlng[i]['lat'], latlng[i]['lng']],100000,{
 				'color':'blue',
 				'fillColor':'blue',
@@ -76,6 +93,7 @@ for(var i in latlng)
 
 		// });
 }
+
 $("#legend1").css("border-style",'solid');
 $("#legend1").css("width",'150px');
 $("#legend1").css("height",'200px');

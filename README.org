@@ -1,0 +1,60 @@
+* README
+** The data used for drawing of map is
+	 latlng = {
+		0:{'lat':28.099, 'lng':76.983,  //GKA
+			 'stnName': 'Gurgaon ki Awaz (CR)',
+			 'freq': '107.8 MHz',
+			 'power': '10KW',
+			 'distName': 'Gurgaon',
+			 'owner':'TRF(The Restoring Force)',
+			 'content':'folk music and other self generated content',
+			 'licenseType': 'CR',
+			 'licenseCost': '120000000 INR',
+			 'licenseRange': '100 KM',
+			 'effectiveRange': '15 KM'},
+		1:{'lat':12.972, 'lng':77.584, //Bangalore
+			'stnName': 'Radio Active (CR)',
+			 'freq': '90.4 MHz',
+			 'power': '10KW',
+			 'distName': 'Bangalore Urban',
+			 'owner':'Jain College',
+			 'content':'educational broadcast',
+			 'licenseType': 'CR',
+			 'licenseCost': '120000000 INR',
+			 'licenseRange': '100 KM',
+			 'effectiveRange': '2 KM'},
+		2:{'lat':24.691, 'lng':78.413,  //Lalitpur
+			'stnName': 'Lalit lokavani (CR)',
+			 'freq': '91.1 MHz',
+			 'power': '10KW',
+			 'distName': 'Lalitpur',
+			 'owner':'Unknown',
+			 'content':'content from EDAA(ek duniya anek awaz)',
+			 'licenseType': 'CR',
+			 'licenseCost': '120000000 INR',
+			 'licenseRange': '100 KM',
+			 'effectiveRange': '15 KM'},
+		3:{'lat':24.999, 'lng':79.499, //Bundelkhand
+			'stnName': 'Radio Bundelkhand (CR)',
+			 'freq': '91.1 MHz',
+			 'power': '10KW',
+			 'distName': 'Bundelkhand',
+			 'owner':'Unknown',
+			 'content':'content is downloaded from internet',
+			 'licenseType': 'CR',
+			 'licenseCost': '120000000 INR',
+			 'licenseRange': '100 KM',
+			 'effectiveRange': '35 KM'},
+		4:{'lat':12.935, 'lng':77.573, //Bangalore
+			'stnName': 'Radio City ',
+			 'freq': '91.1 MHz',
+			 'power': '10KW',
+			 'distName': 'Bangalore Urban',
+			 'owner':'Private',
+			 'content':'Bollywod movie songs',
+			 'licenseType': 'Commercial',
+			 'licenseCost': '1 Crore',
+			 'licenseRange': '100 KM',
+			 'effectiveRange': '100 KM'}
+
+};
