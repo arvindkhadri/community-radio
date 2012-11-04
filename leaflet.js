@@ -3,6 +3,8 @@ L.tileLayer('http://{s}.tile.cloudmade.com/157f9082094e402f89d242e9b9144483/997/
 		maxZoom: 18,
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery Â©<a href="http://cloudmade.com">CloudMade</a>'
 }).addTo(map);
+// var ctl = L.tileLayer.canvas();
+// ctl.drawTile = function(canvas,)
 
 latlng = {
 		0:{'lat':28.099, 'lng':76.983,  //GKA
@@ -15,6 +17,7 @@ latlng = {
 			 'licenseType': 'CR',
 			 'licenseCost': '120000000 INR',
 			 'licenseRange': '100 KM',
+			 'url':'http://localhost:60/#s/gka',
 			 'effectiveRange': '15 KM'},
 		1:{'lat':12.972, 'lng':77.584, //Bangalore
 			'stnName': 'Radio Active (CR)',
@@ -26,6 +29,7 @@ latlng = {
 			 'licenseType': 'CR',
 			 'licenseCost': '120000000 INR',
 			 'licenseRange': '100 KM',
+			 'url':'http://localhost:60/active/treemap.html',
 			 'effectiveRange': '2 KM'},
 		2:{'lat':24.691, 'lng':78.413,  //Lalitpur
 			'stnName': 'Lalit lokavani (CR)',
@@ -37,6 +41,7 @@ latlng = {
 			 'licenseType': 'CR',
 			 'licenseCost': '120000000 INR',
 			 'licenseRange': '100 KM',
+			 'url':'http://localhost:60/lalitpur/treemap.html',
 			 'effectiveRange': '15 KM'},
 		3:{'lat':24.999, 'lng':79.499, //Bundelkhand
 			'stnName': 'Radio Bundelkhand (CR)',
@@ -48,51 +53,42 @@ latlng = {
 			 'licenseType': 'CR',
 			 'licenseCost': '120000000 INR',
 			 'licenseRange': '100 KM',
-			 'effectiveRange': '35 KM'},
-		4:{'lat':12.935, 'lng':77.573, //Bangalore
-			'stnName': 'Radio City ',
-			 'freq': '91.1 MHz',
-			 'power': '10KW',
-			 'distName': 'Bangalore Urban',
-			 'owner':'Private',
-			 'content':'Bollywod movie songs',
-			 'licenseType': 'Commercial',
-			 'licenseCost': '1 Crore',
-			 'licenseRange': '100 KM',
-			 'effectiveRange': '100 KM'}
+			 'url':'http://localhost:60/bkl/treemap.html',
+			 'effectiveRange': '35 KM'}
+		// 4:{'lat':12.935, 'lng':77.573, //Bangalore
+		// 	'stnName': 'Radio City ',
+		// 	 'freq': '91.1 MHz',
+		// 	 'power': '10KW',
+		// 	 'distName': 'Bangalore Urban',
+		// 	 'owner':'Private',
+		// 	 'content':'Bollywod movie songs',
+		// 	 'licenseType': 'Commercial',
+		// 	 'licenseCost': '1 Crore',
+		// 	 'licenseRange': '100 KM',
+		// 	 'effectiveRange': '70 KM'}
 
 };
+var lg = new L.layerGroup();
 for(var i in latlng)
 {
-		if(i == 4)
-		{
-				new L.marker([latlng[i]['lat'], latlng[i]['lng']],{'title':'2 Stations in Bangalore' }).addTo(map);
-
-		}
-		new L.circle([latlng[i]['lat'], latlng[i]['lng']],100000,{
+		var c =	new L.circle([latlng[i]['lat'], latlng[i]['lng']],100000,{
 				'color':'blue',
 				'fillColor':'blue',
-				'fillOpacity':0.5}).addTo(map);
-		var c = new L.circle([latlng[i]['lat'],latlng[i]['lng']],latlng[i]['effectiveRange'].split(' ')[0]*1000,{  //The second argument is radius in meters.
+				'fillOpacity':0.5});
+
+		var d = new L.circle([latlng[i]['lat'],latlng[i]['lng']],latlng[i]['effectiveRange'].split(' ')[0]*1000,{  //The second argument is radius in meters.
 				'color':'black',
 				'fillColor':'black',
 				'fillOpacity':0.7});
-		c.addTo(map);
-		// c.bindPopup(latlng[i]['stnName']+' '+latlng[i]['freq']);
-		c.bindPopup(JSON.stringify(latlng[i],null," "));
+		lg.addLayer(c);
+		lg.addLayer(d);
+		c.bindPopup("<a href='"+latlng[i]['url']+"'>"+latlng[i]['stnName']+"</a>")
 		c.addEventListener('mousemove',function(e){
 				e.target.openPopup();
 		});
-		// c.addEventListener('click',function(e){
-		// 		console.log(e.target._latlng.lat);
-		// 		for(var x in latlng)
-		// 		{
-		// 				if(latlng[x]['lat'] == e.target._latlng.lat && latlng[x]['lng'] == e.target._latlng.lng)
-		// 						e.target.bindPopup(JSON.stringify(latlng[x])).openPopup();
-		// 		}
 
-		// });
 }
+map.addLayer(lg);
 
 $("#legend1").css("border-style",'solid');
 $("#legend1").css("width",'150px');
